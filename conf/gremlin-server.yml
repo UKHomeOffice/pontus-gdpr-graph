@@ -3,18 +3,21 @@ host: 0.0.0.0
 port: 8182
 scriptEvaluationTimeout: 0
 threadPoolWorker: 3
+gremlinPool: 1
 
-channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
+#channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
+channelizer: com.pontusvision.gdpr.WsAndHttpJWTChannelizer
 graphs: {
-  graph: conf/janusgraph-hbase-es.properties
+  graph: /opt/pontus/pontus-graph/current/conf/janusgraph-hbase-es.properties
 }
 scriptEngines: {
   gremlin-groovy: {
     plugins: { org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {},
                org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {},
                org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math, com.pontusvision.gdpr.CIDRUtils], methodImports: [java.lang.Math#*]},
-               org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [conf/globals.groovy , conf/bootstrap.groovy]}
+               org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [/opt/pontus/pontus-graph/current/conf/globals.groovy , /opt/pontus/pontus-graph/current/conf/bootstrap.groovy]}
                }}}
+
 serializers:
   - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { ioRegistries: [org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV1d0, org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry] ,  useMapperFromGraph: graph}}
   - { className: org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0, config: { serializeResultToString: true, useMapperFromGraph: graph }}
@@ -42,6 +45,23 @@ writeBufferHighWaterMark: 65536
 ssl: {
   enabled: false
 }
+
+authentication: {
+  authenticator: com.pontusvision.gdpr.JWTToKerberosAuthenticator,
+  className: com.pontusvision.gdpr.JWTToKerberosAuthenticator,
+  authenticationHandler: com.pontusvision.gdpr.WsAndHttpJWTAuthenticationHandler,
+  config: {
+    zookeeperConnStr: pontus-sandbox.pontusvision.com,
+    zookeeperPrincipal: hbase/pontus-sandbox.pontusvision.com@PONTUSVISION.COM,
+    zookeeperKeytab: /etc/security/keytabs/hbase.service.keytab,
+    jwtKeyStoreFile: /etc/pki/java/localhost.jks,
+    jwtKeyStorePassword: pa55word,
+    jwtKeyPassword: pa55word,
+    jwtKeyStoreType: jks,
+    jwtKeyAlias: localhost
+  }
+}
+
 
 #plugins:
 #  - janusgraph.imports
