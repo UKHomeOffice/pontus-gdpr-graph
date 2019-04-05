@@ -1,12 +1,9 @@
 package com.pontusvision.gdpr;
 
-import org.apache.tinkerpop.gremlin.driver.MessageSerializer;
-import org.apache.tinkerpop.gremlin.driver.ser.MessageTextSerializer;
 import org.apache.tinkerpop.gremlin.server.Settings;
 import org.apache.tinkerpop.gremlin.server.util.ServerGremlinExecutor;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.eclipse.jetty.server.Server;
-import org.javatuples.Pair;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -18,104 +15,13 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class ResourceTest
 {
-  protected final static Map<String, MessageTextSerializer> serializers = new HashMap<>();
-
-  protected static void configureSerializers(ServerGremlinExecutor embeddedServer)
-  {
-
-    // grab some sensible defaults if no serializers are present in the config
-    //    final List<Settings.SerializerSettings> serializerSettings =
-    //        (null == this.settings.serializers || this.settings.serializers.isEmpty()) ? DEFAULT_SERIALIZERS : settings.serializers;
-
-    App.settings.serializers.stream().map(config -> {
-      try
-      {
-        final Class clazz = Class.forName(config.className);
-        if (!MessageSerializer.class.isAssignableFrom(clazz))
-        {
-          //          logger.warn("The {} serialization class does not implement {} - it will not be available.", config.className, MessageSerializer.class.getCanonicalName());
-          return Optional.<MessageSerializer>empty();
-        }
-
-        //        if (clazz.getAnnotation(Deprecated.class) != null)
-        //          logger.warn("The {} serialization class is deprecated.", config.className);
-
-        final MessageSerializer  serializer             = (MessageSerializer) clazz.newInstance();
-        final Map<String, Graph> graphsDefinedAtStartup = new HashMap<>();
-        for (String graphName : App.settings.graphs.keySet())
-        {
-          graphsDefinedAtStartup.put(graphName, embeddedServer.getGraphManager().getGraph(graphName));
-        }
-
-        if (config.config != null)
-          serializer.configure(config.config, graphsDefinedAtStartup);
-
-        return Optional.ofNullable(serializer);
-      }
-      catch (ClassNotFoundException cnfe)
-      {
-        //        logger.warn("Could not find configured serializer class - {} - it will not be available", config.className);
-        return Optional.<MessageSerializer>empty();
-      }
-      catch (Exception ex)
-      {
-        //        logger.warn("Could not instantiate configured serializer class - {} - it will not be available. {}", config.className, ex.getMessage());
-        return Optional.<MessageSerializer>empty();
-      }
-    }).filter(Optional::isPresent).map(Optional::get)
-                            .flatMap(
-                                ser -> Stream.of(ser.mimeTypesSupported()).map(mimeType -> Pair.with(mimeType, ser)))
-                            .forEach(pair -> {
-                              final String mimeType = pair.getValue0();
-
-                              MessageSerializer ser = pair.getValue1();
-                              if (ser instanceof MessageTextSerializer)
-                              {
-                                final MessageTextSerializer serializer = (MessageTextSerializer) ser;
-
-                                if (!serializers.containsKey(mimeType))
-                                {
-                                  //        logger.info("Configured {} with {}", mimeType, pair.getValue1().getClass().getName());
-                                  serializers.put(mimeType, serializer);
-                                }
-                              }
-                            });
-
-    if (serializers.size() == 0)
-    {
-      //      logger.error("No serializers were successfully configured - server will not start.");
-      throw new RuntimeException("Serialization configuration error.");
-    }
-  }
-
-  public static ServerGremlinExecutor createEmbeddedServer() throws URISyntaxException, IOException
-  {
-
-    String gconfFileStr = (String) App.settings.graphs
-        .getOrDefault("graph", "target/test-classes/graphdb-conf/janusgraph-inmem.properties");
-
-    ServerGremlinExecutor embeddedServer = new ServerGremlinExecutor(App.settings, null, null);
-    //    embeddedServer.getGraphManager().putTraversalSource("g", graph.traversal());
-    //    embeddedServer.getGraphManager().putGraph("graph", graph);
-
-    configureSerializers(embeddedServer);
-
-    return embeddedServer;
-
-  }
 
   public static Response callGetRestAPI(String healthcheckURL, MediaType mediaType)
   {
@@ -166,6 +72,29 @@ public class ResourceTest
     }
   }
 
+  public static void shutdownGraph(CompletableFuture<ServerGremlinExecutor> graphServer)
+      throws Exception
+  {
+    if (graphServer != null)
+    {
+      ServerGremlinExecutor sge = graphServer.get();
+
+      Graph graph = sge.getGraphManager().getGraph("graph");
+
+      graph.close();
+
+      sge.getGremlinExecutor().close();
+
+      sge.getGremlinExecutorService().shutdownNow();
+      sge.getGremlinExecutorService().shutdown();
+
+      graphServer.cancel(true);
+
+      App.gserver.stop();
+
+    }
+  }
+
   @Test
   public void getGraphURL() throws Exception
   {
@@ -197,10 +126,8 @@ public class ResourceTest
     }
     finally
     {
-      if (graphServer != null)
-      {
-        graphServer.cancel(true);
-      }
+
+      shutdownGraph(graphServer);
 
     }
 
@@ -224,11 +151,7 @@ public class ResourceTest
     }
     finally
     {
-      if (graphServer != null)
-      {
-        graphServer.cancel(true);
-      }
-
+      shutdownGraph(graphServer);
     }
 
   }
@@ -245,7 +168,6 @@ public class ResourceTest
 
   }
 
-
   @Test
   public void getLivelinessFailureGraphInvalidHostAndPort() throws Exception
   {
@@ -258,7 +180,7 @@ public class ResourceTest
       }
       catch (Exception e)
       {
-         // ignore.
+        // ignore.
       }
       Response resp = callGetRestAPI("http://localhost:" + healthcheckPortNum
 
@@ -271,6 +193,7 @@ public class ResourceTest
     {
       if (graphServer != null)
       {
+        graphServer.get().getGremlinExecutor().close();
         graphServer.cancel(true);
       }
 
@@ -279,6 +202,36 @@ public class ResourceTest
   }
 
 
+  @Test
+  public void getReadinessFailureGraphInvalidHostAndPort() throws Exception
+  {
+    CompletableFuture<ServerGremlinExecutor> graphServer = null;
+    try
+    {
+      try
+      {
+        graphServer = App.startGraphServer("target/test-classes/graphdb-conf/gremlin-url-test.yml");
+      }
+      catch (Exception e)
+      {
+        // ignore.
+      }
+      Response resp = callGetRestAPI("http://localhost:" + healthcheckPortNum
 
+          + "/healthcheck/readiness", MediaType.TEXT_PLAIN_TYPE);
 
+      assertNotEquals(resp.getStatus(), 200);
+
+    }
+    finally
+    {
+      if (graphServer != null)
+      {
+        graphServer.get().getGremlinExecutor().close();
+        graphServer.cancel(true);
+      }
+
+    }
+
+  }
 }

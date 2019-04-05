@@ -269,7 +269,7 @@
             <version>${jersey-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-lucene</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -282,7 +282,7 @@
 
 
         <!--<dependency>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hadoop</artifactId>-->
         <!--<version>${janusgraph.version}</version>-->
         <!--<exclusions>-->
@@ -451,11 +451,11 @@
         <!--<artifactId>jersey-server</artifactId>-->
         <!--</exclusion>-->
         <!--<exclusion>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hadoop</artifactId>-->
         <!--</exclusion>-->
         <!--<exclusion>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
 
         <!--<artifactId>janusgraph-cassandra</artifactId>-->
         <!--</exclusion>-->
@@ -473,7 +473,7 @@
 
 
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-core</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -522,11 +522,11 @@
                     <artifactId>jersey-server</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
                     <artifactId>janusgraph-hadoop</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
 
                     <artifactId>janusgraph-cassandra</artifactId>
                 </exclusion>
@@ -543,7 +543,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-es</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -588,11 +588,11 @@
                     <artifactId>jersey-server</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
                     <artifactId>janusgraph-hadoop</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
 
                     <artifactId>janusgraph-cassandra</artifactId>
                 </exclusion>
@@ -610,7 +610,7 @@
 
 
         <!--<dependency>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hbase</artifactId>-->
         <!--<version>${janusgraph.version}</version>-->
         <!--</dependency>-->
@@ -1020,7 +1020,7 @@
                                     </includes>
                                 </filter>
                                 <filter>
-                                    <artifact>org.janusgraph:*</artifact>
+                                    <artifact>com.pontusvision:*</artifact>
                                     <excludes>
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
