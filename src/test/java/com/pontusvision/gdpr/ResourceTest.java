@@ -121,7 +121,7 @@ public class ResourceTest
           + "/healthcheck/readiness", MediaType.TEXT_PLAIN_TYPE);
 
       assertEquals(resp.getStatus(), 200);
-      assertEquals(resp.readEntity(String.class), "ready");
+      assertEquals("ready",resp.readEntity(String.class));
 
     }
     finally
@@ -146,7 +146,7 @@ public class ResourceTest
           + "/healthcheck/liveliness", MediaType.TEXT_PLAIN_TYPE);
 
       assertEquals(resp.getStatus(), 200);
-      assertEquals(resp.readEntity(String.class), "alive");
+      assertEquals("alive",resp.readEntity(String.class) );
 
     }
     finally

@@ -1,6 +1,5 @@
 package com.pontusvision.gdpr;
 
-//import com.netflix.astyanax.connectionpool.exceptions.ThrottledException;
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.server.GraphManager;
