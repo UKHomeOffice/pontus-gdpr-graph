@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package com.pontusvision.gdpr
+package uk.gov.homeoffice.cdp
 
 import org.apache.tinkerpop.gremlin.process.traversal.Order
 import org.apache.tinkerpop.gremlin.structure.Direction
@@ -21,7 +21,6 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.shaded.jackson.databind.ObjectMapper
 import org.apache.tinkerpop.shaded.jackson.databind.node.ObjectNode
-import org.apache.tinkerpop.shaded.jackson.databind.node.TextNode
 import org.janusgraph.core.Cardinality
 import org.janusgraph.core.EdgeLabel
 import org.janusgraph.core.JanusGraph

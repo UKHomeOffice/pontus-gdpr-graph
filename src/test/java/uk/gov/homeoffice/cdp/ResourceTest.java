@@ -1,4 +1,4 @@
-package com.pontusvision.gdpr;
+package uk.gov.homeoffice.cdp;
 
 import org.apache.tinkerpop.gremlin.server.Settings;
 import org.apache.tinkerpop.gremlin.server.util.ServerGremlinExecutor;

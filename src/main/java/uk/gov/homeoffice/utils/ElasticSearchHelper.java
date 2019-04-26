@@ -1,6 +1,13 @@
-package com.pontusvision.utils;
+/*
+ * Code written by Pontus Vision (c) 2019; used here under the Apache license.
+ * see https://github.com/pontusvision/pontus-gdpr-graph/blob/master/src/main/java/com/pontusvision/utils/ElasticSearchHelper.java
+ * for the original code.
+ */
 
-import com.pontusvision.gdpr.App;
+
+package uk.gov.homeoffice.utils;
+
+import uk.gov.homeoffice.cdp.App;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;

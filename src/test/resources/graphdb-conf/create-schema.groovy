@@ -1,4 +1,4 @@
-import com.pontusvision.gdpr.App
+import uk.gov.homeoffice.cdp.App
 import org.apache.tinkerpop.gremlin.server.Settings
 
 try {

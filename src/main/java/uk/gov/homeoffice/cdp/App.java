@@ -1,4 +1,10 @@
-package com.pontusvision.gdpr;
+/*
+ * Code derived from
+ *  https://github.com/pontusvision/pontus-gdpr-graph/blob/master/src/main/java/com/pontusvision/gdpr/App.java
+ * used here under the Apache license.
+ */
+
+package uk.gov.homeoffice.cdp;
 
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
