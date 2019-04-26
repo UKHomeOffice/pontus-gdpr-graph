@@ -18,6 +18,7 @@ package uk.gov.homeoffice.cdp;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 
+
 public class SchemaLoader
 {
 
@@ -25,7 +26,7 @@ public class SchemaLoader
     }
 
     public void loadSchema(JanusGraph g, String schemaFile) throws Exception {
-        JanusGraphSONSchema importer = new JanusGraphSONSchema(g);
+        uk.gov.homeoffice.cdp.JanusGraphSONSchema importer = new uk.gov.homeoffice.cdp.JanusGraphSONSchema(g);
         importer.readFile(schemaFile);
     }
 

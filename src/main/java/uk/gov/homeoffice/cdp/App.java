@@ -45,7 +45,7 @@ public class App
     Server server = new Server(port);
 
     ResourceConfig config = new ResourceConfig();
-    config.packages("com.pontusvision.gdpr");
+    config.packages("uk.gov.homeoffice.cdp");
     ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
     ServletContextHandler context = new ServletContextHandler(server, "/*");
