@@ -2,18 +2,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pv-gdpr</groupId>
-    <artifactId>pontus-gdpr-graph</artifactId>
-    <version>1.1</version>
+    <groupId>uk.gov.homeoffice.cdp</groupId>
+    <artifactId>tinkerpop-graphdb-wrapper</artifactId>
+    <version>${revision}${sha1}${changelist}</version>
+
     <packaging>jar</packaging>
 
-    <name>com.pontusvision.gdpr</name>
+    <name>uk.gov.homeoffice.cdp</name>
     <url>http://maven.apache.org</url>
 
     <properties>
+        <revision>0</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <sha1/>
+
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <resteasy-client.version>3.5.1.Final</resteasy-client.version>
+
 
         <jetty-version>9.4.3.v20170317</jetty-version>
         <jersey-version>2.26</jersey-version>
@@ -44,6 +52,40 @@
 
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${resteasy-client.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+                    <groupId>org.jboss.spec.javax.annotation</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jcip-annotations</artifactId>
+                    <groupId>net.jcip</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
         <!-- LPPM - adding additional dependencies to enable epoll on Linux -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -227,7 +269,7 @@
             <version>${jersey-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-lucene</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -240,7 +282,7 @@
 
 
         <!--<dependency>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hadoop</artifactId>-->
         <!--<version>${janusgraph.version}</version>-->
         <!--<exclusions>-->
@@ -409,11 +451,11 @@
         <!--<artifactId>jersey-server</artifactId>-->
         <!--</exclusion>-->
         <!--<exclusion>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hadoop</artifactId>-->
         <!--</exclusion>-->
         <!--<exclusion>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
 
         <!--<artifactId>janusgraph-cassandra</artifactId>-->
         <!--</exclusion>-->
@@ -431,7 +473,7 @@
 
 
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-core</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -480,11 +522,11 @@
                     <artifactId>jersey-server</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
                     <artifactId>janusgraph-hadoop</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
 
                     <artifactId>janusgraph-cassandra</artifactId>
                 </exclusion>
@@ -501,7 +543,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.janusgraph</groupId>
+            <groupId>com.pontusvision</groupId>
             <artifactId>janusgraph-es</artifactId>
             <version>${janusgraph.version}</version>
             <exclusions>
@@ -546,11 +588,11 @@
                     <artifactId>jersey-server</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
                     <artifactId>janusgraph-hadoop</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.janusgraph</groupId>
+                    <groupId>com.pontusvision</groupId>
 
                     <artifactId>janusgraph-cassandra</artifactId>
                 </exclusion>
@@ -568,7 +610,7 @@
 
 
         <!--<dependency>-->
-        <!--<groupId>org.janusgraph</groupId>-->
+        <!--<groupId>com.pontusvision</groupId>-->
         <!--<artifactId>janusgraph-hbase</artifactId>-->
         <!--<version>${janusgraph.version}</version>-->
         <!--</dependency>-->
@@ -978,7 +1020,7 @@
                                     </includes>
                                 </filter>
                                 <filter>
-                                    <artifact>org.janusgraph:*</artifact>
+                                    <artifact>com.pontusvision:*</artifact>
                                     <excludes>
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
