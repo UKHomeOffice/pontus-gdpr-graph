@@ -2,7 +2,7 @@
 Tinkerpop GraphDb Wrapper
 
 ## Description
-This project has a liveliness/readiness probe, the relevant test cases, plus a minimum number of jar files required to run janusgraph against a dynamodb / elasticsearch backend. 
+This project has a liveliness/readiness probe, the relevant test cases, plus a minimum number of jar files required to run janusgraph against a dynamodb / elasticsearch backend, as well as an optional embedded graph.
 
 
 ## Running locally
