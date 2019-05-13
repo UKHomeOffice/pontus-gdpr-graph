@@ -50,9 +50,15 @@
             1.0.0
         </apache.directory-api-version>-->
         <cassandra-version>2.1.18</cassandra-version>
+        <prometheus-jmx-javagent-version>0.11.0</prometheus-jmx-javagent-version>
 
     </properties>
     <dependencies>
+        <dependency>
+          <groupId>io.prometheus.jmx</groupId>
+          <artifactId>jmx_prometheus_javaagent</artifactId>
+          <version>${prometheus-jmx-javagent-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
